@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -18,15 +19,21 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme =
     darkColorScheme(
         primary = SingBoxPrimary,
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFF004D57),
+        onPrimaryContainer = Color(0xFFB2EBF2),
         secondary = SingBoxPrimaryLight,
-        tertiary = LogBlue,
+        tertiary = Color(0xFF26A69A),
     )
 
 private val LightColorScheme =
     lightColorScheme(
         primary = SingBoxPrimary,
+        onPrimary = Color.White,
+        primaryContainer = Color(0xFFB2EBF2),
+        onPrimaryContainer = Color(0xFF004D57),
         secondary = SingBoxPrimaryDark,
-        tertiary = LogBlue,
+        tertiary = Color(0xFF00897B),
     )
 
 @Composable

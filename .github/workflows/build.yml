@@ -55,10 +55,30 @@ jobs:
           git checkout dev
           cd ../..
 
-          # Copy our modified files over the originals
+          SRC=custom-ui
+          DST=clients/android
+
           # DashboardScreen.kt - Surfboard-style redesign
-          cp custom-ui/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt \
-             clients/android/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt
+          cp $SRC/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt \
+             $DST/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt
+
+          # Theme - Surfboard teal/cyan colors
+          cp $SRC/app/src/main/java/io/nekohasekai/sfa/compose/theme/Color.kt \
+             $DST/app/src/main/java/io/nekohasekai/sfa/compose/theme/Color.kt
+          cp $SRC/app/src/main/java/io/nekohasekai/sfa/compose/theme/Theme.kt \
+             $DST/app/src/main/java/io/nekohasekai/sfa/compose/theme/Theme.kt
+
+          # SettingsScreen - EricBox branding
+          cp $SRC/app/src/main/java/io/nekohasekai/sfa/compose/screen/settings/SettingsScreen.kt \
+             $DST/app/src/main/java/io/nekohasekai/sfa/compose/screen/settings/SettingsScreen.kt
+
+          # Strings - App name
+          cp $SRC/app/src/main/res/values/strings.xml \
+             $DST/app/src/main/res/values/strings.xml
+          for locale in fa ru-rRU zh-rCN zh-rTW; do
+            cp $SRC/app/src/main/res/values-$locale/strings.xml \
+               $DST/app/src/main/res/values-$locale/strings.xml
+          done
 
       - name: Build APK
         run: |

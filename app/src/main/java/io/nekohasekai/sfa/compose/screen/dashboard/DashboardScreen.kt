@@ -58,7 +58,7 @@ fun DashboardScreen(
     OverrideTopBar {
         TopAppBar(
             title = {
-                Text("sing-box", fontWeight = FontWeight.Bold)
+                Text("EricBox", fontWeight = FontWeight.Bold)
             },
             actions = {
                 if (isRunning) {
