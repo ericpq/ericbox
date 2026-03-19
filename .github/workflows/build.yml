@@ -2,7 +2,7 @@ name: Build EricBox APK
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, main ]
   workflow_dispatch:
 
 jobs:
@@ -17,6 +17,11 @@ jobs:
           ref: testing
           fetch-depth: 0
           submodules: 'recursive'
+
+      - name: Checkout custom UI overlay
+        uses: actions/checkout@v4
+        with:
+          path: custom-ui
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -43,18 +48,16 @@ jobs:
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
-      - name: Overlay custom UI
+      - name: Overlay custom UI onto SFA
         run: |
           # Checkout the dev branch of clients/android submodule
           cd clients/android
           git checkout dev
           cd ../..
 
-          # Checkout our modified files from ericbox repo
-          git clone --depth 1 https://github.com/ericpq/ericbox.git /tmp/ericbox
-
-          # Copy our modified DashboardScreen.kt over the original
-          cp /tmp/ericbox/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt \
+          # Copy our modified files over the originals
+          # DashboardScreen.kt - Surfboard-style redesign
+          cp custom-ui/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt \
              clients/android/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt
 
       - name: Build APK
