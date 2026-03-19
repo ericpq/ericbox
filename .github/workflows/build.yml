@@ -80,6 +80,10 @@ jobs:
                $DST/app/src/main/res/values-$locale/strings.xml
           done
 
+          # Build config and keystore
+          cp $SRC/app/build.gradle.kts $DST/app/build.gradle.kts
+          cp $SRC/app/ericbox.keystore $DST/app/ericbox.keystore
+
       - name: Build APK
         run: |
           mkdir -p clients/android/app/libs
