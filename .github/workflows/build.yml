@@ -1,0 +1,73 @@
+name: Build EricBox APK
+
+on:
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sing-box source
+        uses: actions/checkout@v4
+        with:
+          repository: SagerNet/sing-box
+          ref: testing
+          fetch-depth: 0
+          submodules: 'recursive'
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '~1.25'
+
+      - name: Setup Android NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r28
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build libbox.aar
+        run: |
+          make lib_install
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          make lib_android
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+
+      - name: Overlay custom UI
+        run: |
+          # Checkout the dev branch of clients/android submodule
+          cd clients/android
+          git checkout dev
+          cd ../..
+
+          # Checkout our modified files from ericbox repo
+          git clone --depth 1 https://github.com/ericpq/ericbox.git /tmp/ericbox
+
+          # Copy our modified DashboardScreen.kt over the original
+          cp /tmp/ericbox/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt \
+             clients/android/app/src/main/java/io/nekohasekai/sfa/compose/screen/dashboard/DashboardScreen.kt
+
+      - name: Build APK
+        run: |
+          mkdir -p clients/android/app/libs
+          cp *.aar clients/android/app/libs
+          cd clients/android
+          ./gradlew :app:assembleOtherRelease
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EricBox-APK
+          path: clients/android/app/build/outputs/apk/other/release/*.apk
