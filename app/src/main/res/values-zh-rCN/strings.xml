@@ -124,6 +124,7 @@
     <string name="connection_package_name">包名</string>
 
     <!-- Profiles -->
+    <string name="profile_empty">未选择配置文件</string>
     <string name="no_profiles">没有配置的配置文件</string>
     <string name="add_profile">添加配置文件</string>
     <string name="update_profile">更新配置文件</string>

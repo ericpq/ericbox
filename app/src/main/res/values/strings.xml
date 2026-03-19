@@ -124,6 +124,7 @@
     <string name="connection_package_name">Package Name</string>
 
     <!-- Profiles -->
+    <string name="profile_empty">No profile selected</string>
     <string name="no_profiles">No profiles configured</string>
     <string name="add_profile">Add Profile</string>
     <string name="update_profile">Update profile</string>
